@@ -1,9 +1,70 @@
 syntax = "proto3";
 
+package services.smartreply;
+option go_package = "github.com/verloop/api/go/services/smartreply";
+
+service Calculator {
+    rpc SquareRoot(Number) returns (Number) {}
+}
+
+service SuggestReponse {
+    rpc GetSmartReply (Query) returns (Response);
+}
+
+enum TrainingStatus {
+    TRAINING_UNKNOWN = 0;
+    TRAINING_QUEUED = 1;
+    TRAINING_STARTED = 2;
+    TRAINING_SUCCESS = 3;
+    TRAINING_FAILURE = 4;
+}
+
 message Number {
     float value = 1;
 }
 
-service Calculator {
-    rpc SquareRoot(Number) returns (Number) {}
+message Response {
+    // Response Id, should be same as query id
+    string id = 1;
+    
+    // Response sentence 
+    string replytext = 2;
+
+    // Message chat room id: rid
+    string rid = 3;
+
+    //TODO: add field for created timestamp
+
+    // _tenantId, e.g. nykaa or decathlonblre 
+    string tenant = 5;
+}
+
+message Query {
+    // Query id
+    string id = 1;
+
+    // Query Sentence
+    string querytext  = 2;
+
+    // Message chat room id: rid
+    string rid = 3;
+
+    //TODO: add field for created timestamp
+
+    // _tenantId, e.g. nykaa or decathlonblre 
+    string tenant = 5;
+}
+
+message ReferenceTimeWithTimezone {
+    // milliseconds since epoch (independent of timezone)
+    // Can be negative for times before 1970
+    int64 utcMilliSeconds = 1;
+
+    oneof timezone {
+        // Example : 330 for 'Asia/Kolkata'
+        sint32 utcOffsetMinutes = 2;
+
+        // Example : 'Asia/Kolkata'
+        string timezoneName = 3;
+    }
 }

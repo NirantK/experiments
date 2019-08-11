@@ -15,7 +15,7 @@ class CalculatorStub(object):
       channel: A grpc.Channel.
     """
     self.SquareRoot = channel.unary_unary(
-        '/Calculator/SquareRoot',
+        '/services.smartreply.Calculator/SquareRoot',
         request_serializer=p__calc__pb2.Number.SerializeToString,
         response_deserializer=p__calc__pb2.Number.FromString,
         )
@@ -42,5 +42,47 @@ def add_CalculatorServicer_to_server(servicer, server):
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(
-      'Calculator', rpc_method_handlers)
+      'services.smartreply.Calculator', rpc_method_handlers)
+  server.add_generic_rpc_handlers((generic_handler,))
+
+
+class SuggestReponseStub(object):
+  # missing associated documentation comment in .proto file
+  pass
+
+  def __init__(self, channel):
+    """Constructor.
+
+    Args:
+      channel: A grpc.Channel.
+    """
+    self.GetSmartReply = channel.unary_unary(
+        '/services.smartreply.SuggestReponse/GetSmartReply',
+        request_serializer=p__calc__pb2.Query.SerializeToString,
+        response_deserializer=p__calc__pb2.Response.FromString,
+        )
+
+
+class SuggestReponseServicer(object):
+  # missing associated documentation comment in .proto file
+  pass
+
+  def GetSmartReply(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+
+def add_SuggestReponseServicer_to_server(servicer, server):
+  rpc_method_handlers = {
+      'GetSmartReply': grpc.unary_unary_rpc_method_handler(
+          servicer.GetSmartReply,
+          request_deserializer=p__calc__pb2.Query.FromString,
+          response_serializer=p__calc__pb2.Response.SerializeToString,
+      ),
+  }
+  generic_handler = grpc.method_handlers_generic_handler(
+      'services.smartreply.SuggestReponse', rpc_method_handlers)
   server.add_generic_rpc_handlers((generic_handler,))

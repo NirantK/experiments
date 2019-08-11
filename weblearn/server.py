@@ -21,6 +21,15 @@ class CalculatorServicer(p_calc_pb2_grpc.CalculatorServicer):
         response.value = calc.square_root(request.value)
         return response
 
+class ConvoServicer(p_calc_pb2_grpc.SuggestReponseServicer):
+    
+    # calc.get_response is exposed here
+    # the request is of the datatype Query
+    # teh response is of the datatype Response
+    def GetSmartReply(self, request, context):
+        response = p_calc_pb2.Response()
+        response.replytext = calc.get_response(request.querytext, request.tenant)
+        return response
 
 # create a gRPC server
 server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
@@ -29,6 +38,9 @@ server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
 # to add the defined class to the server
 p_calc_pb2_grpc.add_CalculatorServicer_to_server(
         CalculatorServicer(), server)
+
+p_calc_pb2_grpc.add_SuggestReponseServicer_to_server(
+    ConvoServicer(), server)
 
 # listen on port 50051
 print('Starting server. Listening on port 50051.')
