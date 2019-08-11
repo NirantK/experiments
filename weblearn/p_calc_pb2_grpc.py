@@ -86,3 +86,45 @@ def add_SuggestReponseServicer_to_server(servicer, server):
   generic_handler = grpc.method_handlers_generic_handler(
       'services.smartreply.SuggestReponse', rpc_method_handlers)
   server.add_generic_rpc_handlers((generic_handler,))
+
+
+class SmartReplyTrainingStub(object):
+  # missing associated documentation comment in .proto file
+  pass
+
+  def __init__(self, channel):
+    """Constructor.
+
+    Args:
+      channel: A grpc.Channel.
+    """
+    self.BeginTraining = channel.unary_unary(
+        '/services.smartreply.SmartReplyTraining/BeginTraining',
+        request_serializer=p__calc__pb2.TrainSmartReply.SerializeToString,
+        response_deserializer=p__calc__pb2.TrainSmartReply.FromString,
+        )
+
+
+class SmartReplyTrainingServicer(object):
+  # missing associated documentation comment in .proto file
+  pass
+
+  def BeginTraining(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+
+def add_SmartReplyTrainingServicer_to_server(servicer, server):
+  rpc_method_handlers = {
+      'BeginTraining': grpc.unary_unary_rpc_method_handler(
+          servicer.BeginTraining,
+          request_deserializer=p__calc__pb2.TrainSmartReply.FromString,
+          response_serializer=p__calc__pb2.TrainSmartReply.SerializeToString,
+      ),
+  }
+  generic_handler = grpc.method_handlers_generic_handler(
+      'services.smartreply.SmartReplyTraining', rpc_method_handlers)
+  server.add_generic_rpc_handlers((generic_handler,))

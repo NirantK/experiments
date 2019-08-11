@@ -11,6 +11,10 @@ service SuggestReponse {
     rpc GetSmartReply (Query) returns (Response);
 }
 
+service SmartReplyTraining {
+    rpc BeginTraining (TrainSmartReply) returns (TrainSmartReply);
+}
+
 enum TrainingStatus {
     TRAINING_UNKNOWN = 0;
     TRAINING_QUEUED = 1;
@@ -21,6 +25,23 @@ enum TrainingStatus {
 
 message Number {
     float value = 1;
+}
+
+message TrainSmartReply {
+    // request id, should uniquely identify this training request
+    string id = 1;
+
+    TrainingStatus status = 2;
+
+    // what percent of training is complete? 
+    int32 percent_complete = 20; 
+
+    // etc in minutes: estimated time to completion in minutes 
+    int64 eta = 21;
+
+    // _tenantId e.g. nykaa or decathlonblre
+    string tenant = 5;
+    
 }
 
 message Response {

@@ -31,6 +31,12 @@ class ConvoServicer(p_calc_pb2_grpc.SuggestReponseServicer):
         response.replytext = calc.get_response(request.querytext, request.tenant)
         return response
 
+class TrainServicer(p_calc_pb2_grpc.SmartReplyTrainingServicer):
+    def BeginTraining(self, request, context):
+        response = p_calc_pb2.TrainSmartReply()
+        response.status = calc.train_(request.tenant)
+        return response
+
 # create a gRPC server
 server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
 
@@ -42,6 +48,9 @@ p_calc_pb2_grpc.add_CalculatorServicer_to_server(
 p_calc_pb2_grpc.add_SuggestReponseServicer_to_server(
     ConvoServicer(), server)
 
+p_calc_pb2_grpc.add_SmartReplyTrainingServicer_to_server(
+        TrainServicer(), server)
+    
 # listen on port 50051
 print('Starting server. Listening on port 50051.')
 server.add_insecure_port('[::]:50051')
