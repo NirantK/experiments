@@ -22,23 +22,50 @@ message ListOfChoices {
 }
 
 message Response {
-	// Response msg Id, should be same as query msg id
-	string msgId = 1;
-	
-	
-	// Message chat room id: rid
-	string rid = 2;
 
-	// _tenantId, e.g. nykaa or decathlonblre 
-	string clientId = 3;
-
+	string msgId = 1; // Response msg Id, should be same as query msg id
+	string rid = 2; 	// Message chat room id: rid
+	string clientId = 3; 	// _tenantId, e.g. nykaa or decathlonblre 
 	Choice selectedChoice = 4;
-
-	bool matchFound = 5;
-
-	ListOfChoices choiceScoreList = 6;	
+	bool matchFound = 5; // if none of the strings clear threshold, set to False
+	ListOfChoices choiceScoreList = 6;
+	
+	InputTypes inputType = 7; 	// default is GENERIC
+	ReturnModes returnMode = 9;	// default is EXTRACTONE
 	
 	//TODO: add field for created timestamp
+}
+
+enum InputTypes {
+	/* 
+	* Note that enum values use C++ scoping rules i.e.
+	* UNKNOWN from ReturnModes conflicts with new definition here
+	* But each enum must begin zero value, and hence the specific names for UNKNOWNS :)
+	*/
+
+	INPUTTYPE_UNKNOWN = 0;
+
+	GENERIC = 1;
+	
+	YESNO = 2; // "Yeah, yes, sure, ok, :thumbsup emoji:", "No, nope, nah"
+	
+	RATING3 = 3; // "Bad", "Okay", "Great"
+	
+	// 4 enum value is empty
+	
+	RATING5 = 5; // "Not satisfied", "Somewhat sat", "Ok", "Sat", "Amazing"
+}
+
+enum ReturnModes {
+	/* 
+	* Note that enum values use C++ scoping rules i.e.
+	* UNKNOWN from InputTypes conflicts with new definition here
+	* But each enum must begin zero value, and hence the specific names for UNKNOWNS :)
+	*/
+
+	RETURNMODE_UNKNOWN = 0;
+	EXTRACTONE = 1;
+	SCOREALL = 2;
 }
 
 message Query {
@@ -51,36 +78,16 @@ message Query {
 	// _tenantId, e.g. nykaa or decathlonblre 
 	string clientId = 3;
 
-	ListOfStrings choiceStrings = 4;
+	// input to match against
+	string queryString = 4;
+
+	ListOfStrings choiceStrings = 5;
 	
-	bool ignoreNumbers = 5;
-		
-	enum SemanticTypes {
-		GENERIC = 0;
-		
-		// 1 enum value is empty
-		
-		YESNO = 2; // "Yeah, yes, sure, ok, :thumbsup emoji:", "No, nope, nah"
-		RATING3 = 3; // "Bad", "Okay", "Great"
-		
-		// 4 enum value is empty
-		
-		RATING5 = 5; // "Not satisfied", "Somewhat sat", "Ok", "Sat", "Amazing"
-	}
+	bool ignoreNumbers = 6;
 
-	SemanticTypes inputType = 6;
-}
+	// default is GENERIC
+	InputTypes inputType = 7;
 
-message ReferenceTimeWithTimezone {
-	// milliseconds since epoch (independent of timezone)
-	// Can be negative for times before 1970
-	int64 utcMilliSeconds = 1;
-
-	oneof timezone {
-		// Example : 330 for 'Asia/Kolkata'
-		sint32 utcOffsetMinutes = 2;
-
-		// Example : 'Asia/Kolkata'
-		string timezoneName = 3;
-	}
+	// default is EXTRACTONE
+	ReturnModes returnMode = 9;
 }

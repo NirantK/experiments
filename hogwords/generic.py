@@ -1,17 +1,19 @@
-import math
-import time
+from typing import Dict, List
 
-class classname(object):
-	pass
+from fuzzywuzzy import process
 
-def square_root(x):
-	y = math.sqrt(x)
-	return y
 
-def get_response(querytext:str, tenant:str):
-		if tenant == "nykaa":
-				return "Thanks for talking to Nykaa!"
+def closest_match(txt: str, choices: List[str]) -> Dict:
+    """
+	Returns the string which is the closest match
 
-def train_(tenant:str):
-		time.sleep(1000)
-		return 0
+	Args:
+		txt (str): [description]
+		choices (List[str]): [description]
+	
+	Returns:
+		choice_dict (Dict): Keys are txt and score with the closest_match and percent_match info
+	"""
+    closest_match, percent_match = process.extractOne(query=txt, choices=choices)
+    choice_dict = {"txt": closest_match, "score": percent_match}
+    return choice_dict

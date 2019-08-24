@@ -5,42 +5,43 @@ import hogwords_pb2 as hogwords__pb2
 
 
 class SelectFromChoiceStub(object):
-  # missing associated documentation comment in .proto file
-  pass
+    # missing associated documentation comment in .proto file
+    pass
 
-  def __init__(self, channel):
-    """Constructor.
+    def __init__(self, channel):
+        """Constructor.
 
     Args:
       channel: A grpc.Channel.
     """
-    self.GetChoicesMatch = channel.unary_unary(
-        '/services.hogwords.SelectFromChoice/GetChoicesMatch',
-        request_serializer=hogwords__pb2.Query.SerializeToString,
-        response_deserializer=hogwords__pb2.Response.FromString,
+        self.GetChoicesMatch = channel.unary_unary(
+            "/services.hogwords.SelectFromChoice/GetChoicesMatch",
+            request_serializer=hogwords__pb2.Query.SerializeToString,
+            response_deserializer=hogwords__pb2.Response.FromString,
         )
 
 
 class SelectFromChoiceServicer(object):
-  # missing associated documentation comment in .proto file
-  pass
-
-  def GetChoicesMatch(self, request, context):
     # missing associated documentation comment in .proto file
     pass
-    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-    context.set_details('Method not implemented!')
-    raise NotImplementedError('Method not implemented!')
+
+    def GetChoicesMatch(self, request, context):
+        # missing associated documentation comment in .proto file
+        pass
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details("Method not implemented!")
+        raise NotImplementedError("Method not implemented!")
 
 
 def add_SelectFromChoiceServicer_to_server(servicer, server):
-  rpc_method_handlers = {
-      'GetChoicesMatch': grpc.unary_unary_rpc_method_handler(
-          servicer.GetChoicesMatch,
-          request_deserializer=hogwords__pb2.Query.FromString,
-          response_serializer=hogwords__pb2.Response.SerializeToString,
-      ),
-  }
-  generic_handler = grpc.method_handlers_generic_handler(
-      'services.hogwords.SelectFromChoice', rpc_method_handlers)
-  server.add_generic_rpc_handlers((generic_handler,))
+    rpc_method_handlers = {
+        "GetChoicesMatch": grpc.unary_unary_rpc_method_handler(
+            servicer.GetChoicesMatch,
+            request_deserializer=hogwords__pb2.Query.FromString,
+            response_serializer=hogwords__pb2.Response.SerializeToString,
+        )
+    }
+    generic_handler = grpc.method_handlers_generic_handler(
+        "services.hogwords.SelectFromChoice", rpc_method_handlers
+    )
+    server.add_generic_rpc_handlers((generic_handler,))

@@ -3,432 +3,681 @@
 # source: hogwords.proto
 
 import sys
-_b=sys.version_info[0]<3 and (lambda x:x) or (lambda x:x.encode('latin1'))
+
 from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
 from google.protobuf import reflection as _reflection
 from google.protobuf import symbol_database as _symbol_database
+from google.protobuf.internal import enum_type_wrapper
+
+_b = sys.version_info[0] < 3 and (lambda x: x) or (lambda x: x.encode("latin1"))
+
 # @@protoc_insertion_point(imports)
 
 _sym_db = _symbol_database.Default()
 
 
-
-
 DESCRIPTOR = _descriptor.FileDescriptor(
-  name='hogwords.proto',
-  package='services.hogwords',
-  syntax='proto3',
-  serialized_options=_b('Z+github.com/verloop/api/go/services/hogwords'),
-  serialized_pb=_b('\n\x0ehogwords.proto\x12\x11services.hogwords\" \n\rListOfStrings\x12\x0f\n\x07\x63hoices\x18\x01 \x03(\t\"%\n\x06\x43hoice\x12\x0c\n\x04text\x18\x01 \x01(\t\x12\r\n\x05score\x18\x02 \x01(\x01\"Y\n\rListOfChoices\x12*\n\x07\x63hoices\x18\x01 \x03(\x0b\x32\x19.services.hogwords.Choice\x12\x1c\n\x14recommendedThreshold\x18\x02 \x01(\x02\"\xba\x01\n\x08Response\x12\r\n\x05msgId\x18\x01 \x01(\t\x12\x0b\n\x03rid\x18\x02 \x01(\t\x12\x10\n\x08\x63lientId\x18\x03 \x01(\t\x12\x31\n\x0eselectedChoice\x18\x04 \x01(\x0b\x32\x19.services.hogwords.Choice\x12\x12\n\nmatchFound\x18\x05 \x01(\x08\x12\x39\n\x0f\x63hoiceScoreList\x18\x06 \x01(\x0b\x32 .services.hogwords.ListOfChoices\"\x83\x02\n\x05Query\x12\r\n\x05msgId\x18\x01 \x01(\t\x12\x0b\n\x03rid\x18\x02 \x01(\t\x12\x10\n\x08\x63lientId\x18\x03 \x01(\t\x12\x37\n\rchoiceStrings\x18\x04 \x01(\x0b\x32 .services.hogwords.ListOfStrings\x12\x15\n\rignoreNumbers\x18\x05 \x01(\x08\x12\x39\n\tinputType\x18\x06 \x01(\x0e\x32&.services.hogwords.Query.SemanticTypes\"A\n\rSemanticTypes\x12\x0b\n\x07GENERIC\x10\x00\x12\t\n\x05YESNO\x10\x02\x12\x0b\n\x07RATING3\x10\x03\x12\x0b\n\x07RATING5\x10\x05\"t\n\x19ReferenceTimeWithTimezone\x12\x17\n\x0futcMilliSeconds\x18\x01 \x01(\x03\x12\x1a\n\x10utcOffsetMinutes\x18\x02 \x01(\x11H\x00\x12\x16\n\x0ctimezoneName\x18\x03 \x01(\tH\x00\x42\n\n\x08timezone2\\\n\x10SelectFromChoice\x12H\n\x0fGetChoicesMatch\x12\x18.services.hogwords.Query\x1a\x1b.services.hogwords.ResponseB-Z+github.com/verloop/api/go/services/hogwordsb\x06proto3')
+    name="hogwords.proto",
+    package="services.hogwords",
+    syntax="proto3",
+    serialized_options=_b("Z+github.com/verloop/api/go/services/hogwords"),
+    serialized_pb=_b(
+        '\n\x0ehogwords.proto\x12\x11services.hogwords" \n\rListOfStrings\x12\x0f\n\x07\x63hoices\x18\x01 \x03(\t"%\n\x06\x43hoice\x12\x0c\n\x04text\x18\x01 \x01(\t\x12\r\n\x05score\x18\x02 \x01(\x01"Y\n\rListOfChoices\x12*\n\x07\x63hoices\x18\x01 \x03(\x0b\x32\x19.services.hogwords.Choice\x12\x1c\n\x14recommendedThreshold\x18\x02 \x01(\x02"\xa0\x02\n\x08Response\x12\r\n\x05msgId\x18\x01 \x01(\t\x12\x0b\n\x03rid\x18\x02 \x01(\t\x12\x10\n\x08\x63lientId\x18\x03 \x01(\t\x12\x31\n\x0eselectedChoice\x18\x04 \x01(\x0b\x32\x19.services.hogwords.Choice\x12\x12\n\nmatchFound\x18\x05 \x01(\x08\x12\x39\n\x0f\x63hoiceScoreList\x18\x06 \x01(\x0b\x32 .services.hogwords.ListOfChoices\x12\x30\n\tinputType\x18\x07 \x01(\x0e\x32\x1d.services.hogwords.InputTypes\x12\x32\n\nreturnMode\x18\t \x01(\x0e\x32\x1e.services.hogwords.ReturnModes"\x80\x02\n\x05Query\x12\r\n\x05msgId\x18\x01 \x01(\t\x12\x0b\n\x03rid\x18\x02 \x01(\t\x12\x10\n\x08\x63lientId\x18\x03 \x01(\t\x12\x13\n\x0bqueryString\x18\x04 \x01(\t\x12\x37\n\rchoiceStrings\x18\x05 \x01(\x0b\x32 .services.hogwords.ListOfStrings\x12\x15\n\rignoreNumbers\x18\x06 \x01(\x08\x12\x30\n\tinputType\x18\x07 \x01(\x0e\x32\x1d.services.hogwords.InputTypes\x12\x32\n\nreturnMode\x18\t \x01(\x0e\x32\x1e.services.hogwords.ReturnModes*U\n\nInputTypes\x12\x15\n\x11INPUTTYPE_UNKNOWN\x10\x00\x12\x0b\n\x07GENERIC\x10\x01\x12\t\n\x05YESNO\x10\x02\x12\x0b\n\x07RATING3\x10\x03\x12\x0b\n\x07RATING5\x10\x05*C\n\x0bReturnModes\x12\x16\n\x12RETURNMODE_UNKNOWN\x10\x00\x12\x0e\n\nEXTRACTONE\x10\x01\x12\x0c\n\x08SCOREALL\x10\x02\x32\\\n\x10SelectFromChoice\x12H\n\x0fGetChoicesMatch\x12\x18.services.hogwords.Query\x1a\x1b.services.hogwords.ResponseB-Z+github.com/verloop/api/go/services/hogwordsb\x06proto3'
+    ),
 )
 
-
-
-_QUERY_SEMANTICTYPES = _descriptor.EnumDescriptor(
-  name='SemanticTypes',
-  full_name='services.hogwords.Query.SemanticTypes',
-  filename=None,
-  file=DESCRIPTOR,
-  values=[
-    _descriptor.EnumValueDescriptor(
-      name='GENERIC', index=0, number=0,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='YESNO', index=1, number=2,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='RATING3', index=2, number=3,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='RATING5', index=3, number=5,
-      serialized_options=None,
-      type=None),
-  ],
-  containing_type=None,
-  serialized_options=None,
-  serialized_start=585,
-  serialized_end=650,
+_INPUTTYPES = _descriptor.EnumDescriptor(
+    name="InputTypes",
+    full_name="services.hogwords.InputTypes",
+    filename=None,
+    file=DESCRIPTOR,
+    values=[
+        _descriptor.EnumValueDescriptor(
+            name="INPUTTYPE_UNKNOWN",
+            index=0,
+            number=0,
+            serialized_options=None,
+            type=None,
+        ),
+        _descriptor.EnumValueDescriptor(
+            name="GENERIC", index=1, number=1, serialized_options=None, type=None
+        ),
+        _descriptor.EnumValueDescriptor(
+            name="YESNO", index=2, number=2, serialized_options=None, type=None
+        ),
+        _descriptor.EnumValueDescriptor(
+            name="RATING3", index=3, number=3, serialized_options=None, type=None
+        ),
+        _descriptor.EnumValueDescriptor(
+            name="RATING5", index=4, number=5, serialized_options=None, type=None
+        ),
+    ],
+    containing_type=None,
+    serialized_options=None,
+    serialized_start=751,
+    serialized_end=836,
 )
-_sym_db.RegisterEnumDescriptor(_QUERY_SEMANTICTYPES)
+_sym_db.RegisterEnumDescriptor(_INPUTTYPES)
+
+InputTypes = enum_type_wrapper.EnumTypeWrapper(_INPUTTYPES)
+_RETURNMODES = _descriptor.EnumDescriptor(
+    name="ReturnModes",
+    full_name="services.hogwords.ReturnModes",
+    filename=None,
+    file=DESCRIPTOR,
+    values=[
+        _descriptor.EnumValueDescriptor(
+            name="RETURNMODE_UNKNOWN",
+            index=0,
+            number=0,
+            serialized_options=None,
+            type=None,
+        ),
+        _descriptor.EnumValueDescriptor(
+            name="EXTRACTONE", index=1, number=1, serialized_options=None, type=None
+        ),
+        _descriptor.EnumValueDescriptor(
+            name="SCOREALL", index=2, number=2, serialized_options=None, type=None
+        ),
+    ],
+    containing_type=None,
+    serialized_options=None,
+    serialized_start=838,
+    serialized_end=905,
+)
+_sym_db.RegisterEnumDescriptor(_RETURNMODES)
+
+ReturnModes = enum_type_wrapper.EnumTypeWrapper(_RETURNMODES)
+INPUTTYPE_UNKNOWN = 0
+GENERIC = 1
+YESNO = 2
+RATING3 = 3
+RATING5 = 5
+RETURNMODE_UNKNOWN = 0
+EXTRACTONE = 1
+SCOREALL = 2
 
 
 _LISTOFSTRINGS = _descriptor.Descriptor(
-  name='ListOfStrings',
-  full_name='services.hogwords.ListOfStrings',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='choices', full_name='services.hogwords.ListOfStrings.choices', index=0,
-      number=1, type=9, cpp_type=9, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=37,
-  serialized_end=69,
+    name="ListOfStrings",
+    full_name="services.hogwords.ListOfStrings",
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name="choices",
+            full_name="services.hogwords.ListOfStrings.choices",
+            index=0,
+            number=1,
+            type=9,
+            cpp_type=9,
+            label=3,
+            has_default_value=False,
+            default_value=[],
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR,
+        )
+    ],
+    extensions=[],
+    nested_types=[],
+    enum_types=[],
+    serialized_options=None,
+    is_extendable=False,
+    syntax="proto3",
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=37,
+    serialized_end=69,
 )
 
 
 _CHOICE = _descriptor.Descriptor(
-  name='Choice',
-  full_name='services.hogwords.Choice',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='text', full_name='services.hogwords.Choice.text', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='score', full_name='services.hogwords.Choice.score', index=1,
-      number=2, type=1, cpp_type=5, label=1,
-      has_default_value=False, default_value=float(0),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=71,
-  serialized_end=108,
+    name="Choice",
+    full_name="services.hogwords.Choice",
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name="text",
+            full_name="services.hogwords.Choice.text",
+            index=0,
+            number=1,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b("").decode("utf-8"),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR,
+        ),
+        _descriptor.FieldDescriptor(
+            name="score",
+            full_name="services.hogwords.Choice.score",
+            index=1,
+            number=2,
+            type=1,
+            cpp_type=5,
+            label=1,
+            has_default_value=False,
+            default_value=float(0),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR,
+        ),
+    ],
+    extensions=[],
+    nested_types=[],
+    enum_types=[],
+    serialized_options=None,
+    is_extendable=False,
+    syntax="proto3",
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=71,
+    serialized_end=108,
 )
 
 
 _LISTOFCHOICES = _descriptor.Descriptor(
-  name='ListOfChoices',
-  full_name='services.hogwords.ListOfChoices',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='choices', full_name='services.hogwords.ListOfChoices.choices', index=0,
-      number=1, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='recommendedThreshold', full_name='services.hogwords.ListOfChoices.recommendedThreshold', index=1,
-      number=2, type=2, cpp_type=6, label=1,
-      has_default_value=False, default_value=float(0),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=110,
-  serialized_end=199,
+    name="ListOfChoices",
+    full_name="services.hogwords.ListOfChoices",
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name="choices",
+            full_name="services.hogwords.ListOfChoices.choices",
+            index=0,
+            number=1,
+            type=11,
+            cpp_type=10,
+            label=3,
+            has_default_value=False,
+            default_value=[],
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR,
+        ),
+        _descriptor.FieldDescriptor(
+            name="recommendedThreshold",
+            full_name="services.hogwords.ListOfChoices.recommendedThreshold",
+            index=1,
+            number=2,
+            type=2,
+            cpp_type=6,
+            label=1,
+            has_default_value=False,
+            default_value=float(0),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR,
+        ),
+    ],
+    extensions=[],
+    nested_types=[],
+    enum_types=[],
+    serialized_options=None,
+    is_extendable=False,
+    syntax="proto3",
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=110,
+    serialized_end=199,
 )
 
 
 _RESPONSE = _descriptor.Descriptor(
-  name='Response',
-  full_name='services.hogwords.Response',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='msgId', full_name='services.hogwords.Response.msgId', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='rid', full_name='services.hogwords.Response.rid', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='clientId', full_name='services.hogwords.Response.clientId', index=2,
-      number=3, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='selectedChoice', full_name='services.hogwords.Response.selectedChoice', index=3,
-      number=4, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='matchFound', full_name='services.hogwords.Response.matchFound', index=4,
-      number=5, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='choiceScoreList', full_name='services.hogwords.Response.choiceScoreList', index=5,
-      number=6, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=202,
-  serialized_end=388,
+    name="Response",
+    full_name="services.hogwords.Response",
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name="msgId",
+            full_name="services.hogwords.Response.msgId",
+            index=0,
+            number=1,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b("").decode("utf-8"),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR,
+        ),
+        _descriptor.FieldDescriptor(
+            name="rid",
+            full_name="services.hogwords.Response.rid",
+            index=1,
+            number=2,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b("").decode("utf-8"),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR,
+        ),
+        _descriptor.FieldDescriptor(
+            name="clientId",
+            full_name="services.hogwords.Response.clientId",
+            index=2,
+            number=3,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b("").decode("utf-8"),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR,
+        ),
+        _descriptor.FieldDescriptor(
+            name="selectedChoice",
+            full_name="services.hogwords.Response.selectedChoice",
+            index=3,
+            number=4,
+            type=11,
+            cpp_type=10,
+            label=1,
+            has_default_value=False,
+            default_value=None,
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR,
+        ),
+        _descriptor.FieldDescriptor(
+            name="matchFound",
+            full_name="services.hogwords.Response.matchFound",
+            index=4,
+            number=5,
+            type=8,
+            cpp_type=7,
+            label=1,
+            has_default_value=False,
+            default_value=False,
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR,
+        ),
+        _descriptor.FieldDescriptor(
+            name="choiceScoreList",
+            full_name="services.hogwords.Response.choiceScoreList",
+            index=5,
+            number=6,
+            type=11,
+            cpp_type=10,
+            label=1,
+            has_default_value=False,
+            default_value=None,
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR,
+        ),
+        _descriptor.FieldDescriptor(
+            name="inputType",
+            full_name="services.hogwords.Response.inputType",
+            index=6,
+            number=7,
+            type=14,
+            cpp_type=8,
+            label=1,
+            has_default_value=False,
+            default_value=0,
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR,
+        ),
+        _descriptor.FieldDescriptor(
+            name="returnMode",
+            full_name="services.hogwords.Response.returnMode",
+            index=7,
+            number=9,
+            type=14,
+            cpp_type=8,
+            label=1,
+            has_default_value=False,
+            default_value=0,
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR,
+        ),
+    ],
+    extensions=[],
+    nested_types=[],
+    enum_types=[],
+    serialized_options=None,
+    is_extendable=False,
+    syntax="proto3",
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=202,
+    serialized_end=490,
 )
 
 
 _QUERY = _descriptor.Descriptor(
-  name='Query',
-  full_name='services.hogwords.Query',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='msgId', full_name='services.hogwords.Query.msgId', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='rid', full_name='services.hogwords.Query.rid', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='clientId', full_name='services.hogwords.Query.clientId', index=2,
-      number=3, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='choiceStrings', full_name='services.hogwords.Query.choiceStrings', index=3,
-      number=4, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='ignoreNumbers', full_name='services.hogwords.Query.ignoreNumbers', index=4,
-      number=5, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='inputType', full_name='services.hogwords.Query.inputType', index=5,
-      number=6, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-    _QUERY_SEMANTICTYPES,
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=391,
-  serialized_end=650,
+    name="Query",
+    full_name="services.hogwords.Query",
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name="msgId",
+            full_name="services.hogwords.Query.msgId",
+            index=0,
+            number=1,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b("").decode("utf-8"),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR,
+        ),
+        _descriptor.FieldDescriptor(
+            name="rid",
+            full_name="services.hogwords.Query.rid",
+            index=1,
+            number=2,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b("").decode("utf-8"),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR,
+        ),
+        _descriptor.FieldDescriptor(
+            name="clientId",
+            full_name="services.hogwords.Query.clientId",
+            index=2,
+            number=3,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b("").decode("utf-8"),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR,
+        ),
+        _descriptor.FieldDescriptor(
+            name="queryString",
+            full_name="services.hogwords.Query.queryString",
+            index=3,
+            number=4,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=_b("").decode("utf-8"),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR,
+        ),
+        _descriptor.FieldDescriptor(
+            name="choiceStrings",
+            full_name="services.hogwords.Query.choiceStrings",
+            index=4,
+            number=5,
+            type=11,
+            cpp_type=10,
+            label=1,
+            has_default_value=False,
+            default_value=None,
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR,
+        ),
+        _descriptor.FieldDescriptor(
+            name="ignoreNumbers",
+            full_name="services.hogwords.Query.ignoreNumbers",
+            index=5,
+            number=6,
+            type=8,
+            cpp_type=7,
+            label=1,
+            has_default_value=False,
+            default_value=False,
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR,
+        ),
+        _descriptor.FieldDescriptor(
+            name="inputType",
+            full_name="services.hogwords.Query.inputType",
+            index=6,
+            number=7,
+            type=14,
+            cpp_type=8,
+            label=1,
+            has_default_value=False,
+            default_value=0,
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR,
+        ),
+        _descriptor.FieldDescriptor(
+            name="returnMode",
+            full_name="services.hogwords.Query.returnMode",
+            index=7,
+            number=9,
+            type=14,
+            cpp_type=8,
+            label=1,
+            has_default_value=False,
+            default_value=0,
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR,
+        ),
+    ],
+    extensions=[],
+    nested_types=[],
+    enum_types=[],
+    serialized_options=None,
+    is_extendable=False,
+    syntax="proto3",
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=493,
+    serialized_end=749,
 )
 
-
-_REFERENCETIMEWITHTIMEZONE = _descriptor.Descriptor(
-  name='ReferenceTimeWithTimezone',
-  full_name='services.hogwords.ReferenceTimeWithTimezone',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='utcMilliSeconds', full_name='services.hogwords.ReferenceTimeWithTimezone.utcMilliSeconds', index=0,
-      number=1, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='utcOffsetMinutes', full_name='services.hogwords.ReferenceTimeWithTimezone.utcOffsetMinutes', index=1,
-      number=2, type=17, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='timezoneName', full_name='services.hogwords.ReferenceTimeWithTimezone.timezoneName', index=2,
-      number=3, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-    _descriptor.OneofDescriptor(
-      name='timezone', full_name='services.hogwords.ReferenceTimeWithTimezone.timezone',
-      index=0, containing_type=None, fields=[]),
-  ],
-  serialized_start=652,
-  serialized_end=768,
-)
-
-_LISTOFCHOICES.fields_by_name['choices'].message_type = _CHOICE
-_RESPONSE.fields_by_name['selectedChoice'].message_type = _CHOICE
-_RESPONSE.fields_by_name['choiceScoreList'].message_type = _LISTOFCHOICES
-_QUERY.fields_by_name['choiceStrings'].message_type = _LISTOFSTRINGS
-_QUERY.fields_by_name['inputType'].enum_type = _QUERY_SEMANTICTYPES
-_QUERY_SEMANTICTYPES.containing_type = _QUERY
-_REFERENCETIMEWITHTIMEZONE.oneofs_by_name['timezone'].fields.append(
-  _REFERENCETIMEWITHTIMEZONE.fields_by_name['utcOffsetMinutes'])
-_REFERENCETIMEWITHTIMEZONE.fields_by_name['utcOffsetMinutes'].containing_oneof = _REFERENCETIMEWITHTIMEZONE.oneofs_by_name['timezone']
-_REFERENCETIMEWITHTIMEZONE.oneofs_by_name['timezone'].fields.append(
-  _REFERENCETIMEWITHTIMEZONE.fields_by_name['timezoneName'])
-_REFERENCETIMEWITHTIMEZONE.fields_by_name['timezoneName'].containing_oneof = _REFERENCETIMEWITHTIMEZONE.oneofs_by_name['timezone']
-DESCRIPTOR.message_types_by_name['ListOfStrings'] = _LISTOFSTRINGS
-DESCRIPTOR.message_types_by_name['Choice'] = _CHOICE
-DESCRIPTOR.message_types_by_name['ListOfChoices'] = _LISTOFCHOICES
-DESCRIPTOR.message_types_by_name['Response'] = _RESPONSE
-DESCRIPTOR.message_types_by_name['Query'] = _QUERY
-DESCRIPTOR.message_types_by_name['ReferenceTimeWithTimezone'] = _REFERENCETIMEWITHTIMEZONE
+_LISTOFCHOICES.fields_by_name["choices"].message_type = _CHOICE
+_RESPONSE.fields_by_name["selectedChoice"].message_type = _CHOICE
+_RESPONSE.fields_by_name["choiceScoreList"].message_type = _LISTOFCHOICES
+_RESPONSE.fields_by_name["inputType"].enum_type = _INPUTTYPES
+_RESPONSE.fields_by_name["returnMode"].enum_type = _RETURNMODES
+_QUERY.fields_by_name["choiceStrings"].message_type = _LISTOFSTRINGS
+_QUERY.fields_by_name["inputType"].enum_type = _INPUTTYPES
+_QUERY.fields_by_name["returnMode"].enum_type = _RETURNMODES
+DESCRIPTOR.message_types_by_name["ListOfStrings"] = _LISTOFSTRINGS
+DESCRIPTOR.message_types_by_name["Choice"] = _CHOICE
+DESCRIPTOR.message_types_by_name["ListOfChoices"] = _LISTOFCHOICES
+DESCRIPTOR.message_types_by_name["Response"] = _RESPONSE
+DESCRIPTOR.message_types_by_name["Query"] = _QUERY
+DESCRIPTOR.enum_types_by_name["InputTypes"] = _INPUTTYPES
+DESCRIPTOR.enum_types_by_name["ReturnModes"] = _RETURNMODES
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
-ListOfStrings = _reflection.GeneratedProtocolMessageType('ListOfStrings', (_message.Message,), {
-  'DESCRIPTOR' : _LISTOFSTRINGS,
-  '__module__' : 'hogwords_pb2'
-  # @@protoc_insertion_point(class_scope:services.hogwords.ListOfStrings)
-  })
+ListOfStrings = _reflection.GeneratedProtocolMessageType(
+    "ListOfStrings",
+    (_message.Message,),
+    {
+        "DESCRIPTOR": _LISTOFSTRINGS,
+        "__module__": "hogwords_pb2"
+        # @@protoc_insertion_point(class_scope:services.hogwords.ListOfStrings)
+    },
+)
 _sym_db.RegisterMessage(ListOfStrings)
 
-Choice = _reflection.GeneratedProtocolMessageType('Choice', (_message.Message,), {
-  'DESCRIPTOR' : _CHOICE,
-  '__module__' : 'hogwords_pb2'
-  # @@protoc_insertion_point(class_scope:services.hogwords.Choice)
-  })
+Choice = _reflection.GeneratedProtocolMessageType(
+    "Choice",
+    (_message.Message,),
+    {
+        "DESCRIPTOR": _CHOICE,
+        "__module__": "hogwords_pb2"
+        # @@protoc_insertion_point(class_scope:services.hogwords.Choice)
+    },
+)
 _sym_db.RegisterMessage(Choice)
 
-ListOfChoices = _reflection.GeneratedProtocolMessageType('ListOfChoices', (_message.Message,), {
-  'DESCRIPTOR' : _LISTOFCHOICES,
-  '__module__' : 'hogwords_pb2'
-  # @@protoc_insertion_point(class_scope:services.hogwords.ListOfChoices)
-  })
+ListOfChoices = _reflection.GeneratedProtocolMessageType(
+    "ListOfChoices",
+    (_message.Message,),
+    {
+        "DESCRIPTOR": _LISTOFCHOICES,
+        "__module__": "hogwords_pb2"
+        # @@protoc_insertion_point(class_scope:services.hogwords.ListOfChoices)
+    },
+)
 _sym_db.RegisterMessage(ListOfChoices)
 
-Response = _reflection.GeneratedProtocolMessageType('Response', (_message.Message,), {
-  'DESCRIPTOR' : _RESPONSE,
-  '__module__' : 'hogwords_pb2'
-  # @@protoc_insertion_point(class_scope:services.hogwords.Response)
-  })
+Response = _reflection.GeneratedProtocolMessageType(
+    "Response",
+    (_message.Message,),
+    {
+        "DESCRIPTOR": _RESPONSE,
+        "__module__": "hogwords_pb2"
+        # @@protoc_insertion_point(class_scope:services.hogwords.Response)
+    },
+)
 _sym_db.RegisterMessage(Response)
 
-Query = _reflection.GeneratedProtocolMessageType('Query', (_message.Message,), {
-  'DESCRIPTOR' : _QUERY,
-  '__module__' : 'hogwords_pb2'
-  # @@protoc_insertion_point(class_scope:services.hogwords.Query)
-  })
+Query = _reflection.GeneratedProtocolMessageType(
+    "Query",
+    (_message.Message,),
+    {
+        "DESCRIPTOR": _QUERY,
+        "__module__": "hogwords_pb2"
+        # @@protoc_insertion_point(class_scope:services.hogwords.Query)
+    },
+)
 _sym_db.RegisterMessage(Query)
-
-ReferenceTimeWithTimezone = _reflection.GeneratedProtocolMessageType('ReferenceTimeWithTimezone', (_message.Message,), {
-  'DESCRIPTOR' : _REFERENCETIMEWITHTIMEZONE,
-  '__module__' : 'hogwords_pb2'
-  # @@protoc_insertion_point(class_scope:services.hogwords.ReferenceTimeWithTimezone)
-  })
-_sym_db.RegisterMessage(ReferenceTimeWithTimezone)
 
 
 DESCRIPTOR._options = None
 
 _SELECTFROMCHOICE = _descriptor.ServiceDescriptor(
-  name='SelectFromChoice',
-  full_name='services.hogwords.SelectFromChoice',
-  file=DESCRIPTOR,
-  index=0,
-  serialized_options=None,
-  serialized_start=770,
-  serialized_end=862,
-  methods=[
-  _descriptor.MethodDescriptor(
-    name='GetChoicesMatch',
-    full_name='services.hogwords.SelectFromChoice.GetChoicesMatch',
+    name="SelectFromChoice",
+    full_name="services.hogwords.SelectFromChoice",
+    file=DESCRIPTOR,
     index=0,
-    containing_service=None,
-    input_type=_QUERY,
-    output_type=_RESPONSE,
     serialized_options=None,
-  ),
-])
+    serialized_start=907,
+    serialized_end=999,
+    methods=[
+        _descriptor.MethodDescriptor(
+            name="GetChoicesMatch",
+            full_name="services.hogwords.SelectFromChoice.GetChoicesMatch",
+            index=0,
+            containing_service=None,
+            input_type=_QUERY,
+            output_type=_RESPONSE,
+            serialized_options=None,
+        )
+    ],
+)
 _sym_db.RegisterServiceDescriptor(_SELECTFROMCHOICE)
 
-DESCRIPTOR.services_by_name['SelectFromChoice'] = _SELECTFROMCHOICE
+DESCRIPTOR.services_by_name["SelectFromChoice"] = _SELECTFROMCHOICE
 
 # @@protoc_insertion_point(module_scope)
