@@ -3,38 +3,20 @@ from concurrent import futures
 import time
 
 # import the generated classes
-import p_calc_pb2
-import p_calc_pb2_grpc
+import hogwords_pb2 as pb2 ##nocheck
+import hogwords_pb2_grpc as pb2_grpc
 
-# import the original calculator.py
-import calc
+# import the core logic for generic string matching
+import generic as generic
 
-# create a class to define the server functions, derived from
-# calculator_pb2_grpc.CalculatorServicer
-class CalculatorServicer(p_calc_pb2_grpc.CalculatorServicer):
+# create a class to define the server functions
+class WebServicer(pb2_grpc.SelectFromChoiceServicer):
 
-    # calculator.square_root is exposed here
-    # the request and response are of the data type
-    # p_calc_pb2.Number
-    def SquareRoot(self, request, context):
-        response = p_calc_pb2.Number()
-        response.value = calc.square_root(request.value)
-        return response
-
-class ConvoServicer(p_calc_pb2_grpc.SuggestReponseServicer):
-    
-    # calc.get_response is exposed here
-    # the request is of the datatype Query
-    # teh response is of the datatype Response
-    def GetSmartReply(self, request, context):
-        response = p_calc_pb2.Response()
-        response.replytext = calc.get_response(request.querytext, request.tenant)
-        return response
-
-class TrainServicer(p_calc_pb2_grpc.SmartReplyTrainingServicer):
-    def BeginTraining(self, request, context):
-        response = p_calc_pb2.TrainSmartReply()
-        response.status = calc.train_(request.tenant)
+    def GetChoicesMatch(self, request, context):
+        response = pb2.Response()
+        response.rid = request.rid
+        response.msgId = request.msgId
+        response.clientId = request.clientId
         return response
 
 # create a gRPC server
@@ -42,14 +24,8 @@ server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
 
 # use the generated function `add_CalculatorServicer_to_server`
 # to add the defined class to the server
-p_calc_pb2_grpc.add_CalculatorServicer_to_server(
-        CalculatorServicer(), server)
-
-p_calc_pb2_grpc.add_SuggestReponseServicer_to_server(
-    ConvoServicer(), server)
-
-p_calc_pb2_grpc.add_SmartReplyTrainingServicer_to_server(
-        TrainServicer(), server)
+pb2_grpc.add_SelectFromChoiceServicer_to_server(
+        WebServicer(), server)
     
 # listen on port 50051
 print('Starting server. Listening on port 50051.')
