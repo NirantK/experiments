@@ -6,9 +6,10 @@ https://github.com/jasonwei20/eda_nlp
 
 @author: Nirant Kasliwal nirant@verloop.io
 """
-
+from preprocessing import *
 import random
 import re
+from pathlib import Path
 from random import shuffle
 from typing import List, Tuple, Union
 
@@ -16,32 +17,43 @@ from typing import List, Tuple, Union
 # import nltk
 # nltk.download('wordnet')
 from nltk.corpus import wordnet
-from pathlib import Path
+
 strOrNone = Union[str, None]
 
 with Path("artifacts/stopwords.txt").open("r") as f:
     stop_words = f.readlines()
 
-def get_only_chars(line):
+def is_alpha(char:str)->bool:
+    """
+    Check whether a character is an English alphabet or not
+    
+    Args:
+        word (str): [description]
+    
+    Returns:
+        Boolean: [description]
+    """
+    try:
+        return char.encode('ascii').isalpha()
+    except:
+        return False
 
-    clean_line = ""
 
-    line = line.replace("’", "")
-    line = line.replace("'", "")
-    line = line.replace("-", " ")  # replace hyphens with spaces
-    line = line.replace("\t", " ")
-    line = line.replace("\n", " ")
-    line = line.lower()
+def get_only_chars(line: str):
+    """
+    Removes vowels from a line, I guess?
+    
+    Args:
+        line (str): [description]
+    
+    Returns:
+        clean_line (str): [description]
+    """
+    line = fix_html(line)
+    line = deal_caps(line)
 
-    for char in line:
-        if char in "qwertyuiopasdfghjklzxcvbnm ":
-            clean_line += char
-        else:
-            clean_line += " "
-
-    clean_line = re.sub(" +", " ", clean_line)  # delete extra spaces
-    if clean_line[0] == " ":
-        clean_line = clean_line[1:]
+    clean_line = [char if is_alpha(char) else " " for char in line]
+    clean_line = rm_useless_spaces(clean_line)  # delete extra spaces
     return clean_line
 
 
@@ -66,14 +78,9 @@ def synonym_replacement(words: str, n: int):
         if len(synonyms) >= 1:
             synonym = random.choice(list(synonyms))
             new_words = [synonym if word == random_word else word for word in new_words]
-            # print("replaced", random_word, "with", synonym)
             num_replaced += 1
         if num_replaced >= n:  # only replace up to n words
             break
-
-    # this is stupid but we need it, trust me
-    sentence = " ".join(new_words)
-    new_words = sentence.split(" ")
 
     return new_words
 
@@ -187,8 +194,28 @@ def random_insertion(words, n):
     return new_words
 
 
-def augment(sentence, alpha_sr=0.1, alpha_ri=0.1, alpha_rs=0.1, p_rd=0.1, num_aug=9):
-
+def augment(
+    sentence: str,
+    alpha_sr: float = 0.1,
+    alpha_ri: float = 0.1,
+    alpha_rs: float = 0.1,
+    p_rd: float = 0.1,
+    num_aug: float = 9,
+):
+    """
+    Main driver function which takes in one sentences and returns a list of num_aug sentences
+    
+    Args:
+        sentence (str): input sentence for augmentation
+        alpha_sr (float, optional): Synonym Replacement Probability. Defaults to 0.1.
+        alpha_ri (float, optional): Random Insertion Probability. Defaults to 0.1.
+        alpha_rs (float, optional): Random Swap Probability. Defaults to 0.1.
+        p_rd (float, optional): Percentaged of words to delete randomly. Defaults to 0.1.
+        num_aug (int, optional): Number of augmented sentences to return. Defaults to 9.
+    
+    Returns:
+        List[str]: [description]
+    """
     sentence = get_only_chars(sentence)
     words = sentence.split(" ")
     words = [word for word in words if word is not ""]

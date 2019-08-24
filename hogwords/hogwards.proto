@@ -1,0 +1,80 @@
+syntax = "proto3";
+
+package services.hogwords;
+option go_package = "github.com/verloop/api/go/services/hogwords";
+
+service SelectFromChoice {
+    rpc GetOneChoice (Query) returns (Response);
+}
+
+message ListOfStrings {
+    repeated string choices=1;
+}
+
+message Choice {
+	string text = 1;
+	double score = 2;
+}
+
+message ListOfChoices {
+	repeated Choice choices = 1;
+	float recommendedThreshold = 2;
+}
+
+message Response {
+    // Response msg Id, should be same as query msg id
+    string msgId = 1;
+    
+    
+	// Message chat room id: rid
+    string rid = 2;
+
+    // _tenantId, e.g. nykaa or decathlonblre 
+    string clientId = 3;
+
+    Choice selectedChoice = 4;
+
+	bool matchFound = 5;
+
+	ListOfChoices choiceScoreList = 6;	
+	
+	//TODO: add field for created timestamp
+}
+
+message Query {
+    // Query id
+    string msgId = 1;
+
+    // Message chat room id: rid
+    string rid = 2;
+	
+	// _tenantId, e.g. nykaa or decathlonblre 
+    string clientId = 3;
+
+    ListOfStrings choiceStrings = 4;
+	
+	bool ignoreNumbers = 5;
+		
+	enum SemanticTypes {
+		GENERIC = 1;
+		YESNO = 2; // "Yeah, yes, sure, ok, :thumbsup emoji:", "No, nope, nah"
+		RATING3 = 3; // "Bad", "Okay", "Great"
+		RATING5 = 5; // "Not satisfied", "Somewhat sat", "Ok", "Sat", "Amazing"
+	}
+
+	SemanticTypes inputType = 6;
+}
+
+message ReferenceTimeWithTimezone {
+    // milliseconds since epoch (independent of timezone)
+    // Can be negative for times before 1970
+    int64 utcMilliSeconds = 1;
+
+    oneof timezone {
+        // Example : 330 for 'Asia/Kolkata'
+        sint32 utcOffsetMinutes = 2;
+
+        // Example : 'Asia/Kolkata'
+        string timezoneName = 3;
+    }
+}
