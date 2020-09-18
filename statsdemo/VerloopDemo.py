@@ -9,7 +9,6 @@ import textacy
 import textacy.similarity
 import textacy.tm  
 import textacy.vsm
-from fastcore.dispatch import *
 from textacy.spacier.doc_extensions import get_preview, get_tokens
 
 st.title("Text Analysis")
@@ -41,18 +40,6 @@ st.markdown("## Text Preview")
 st.markdown(f"Here are {preview_count} random samples from the input")
 preview_df = df.sample(preview_count, random_state=37)
 preview_df
-
-# chart_data = pd.DataFrame(
-#      np.random.randn(20, 3),
-#      columns=['a', 'b', 'c'])
-
-# st.line_chart(chart_data)
-
-# map_data = pd.DataFrame(
-#     np.random.randn(1000, 2) / [50, 50] + [37.76, -122.4],
-#     columns=['lat', 'lon'])
-
-# st.map(map_data)
 
 "### Preparing for Analysis"
 st.write(
