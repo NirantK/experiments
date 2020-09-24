@@ -1,4 +1,5 @@
 import collections
+import json
 import time
 from typing import Dict, List, Tuple
 
@@ -9,6 +10,7 @@ import textacy
 import textacy.similarity
 import textacy.tm
 import textacy.vsm
+from fastcore.utils import Path
 from textacy.spacier.doc_extensions import get_preview, get_tokens
 
 st.title("Text Analysis")
@@ -68,97 +70,97 @@ corpus = make_corpus(df, col_name="QueryText", min_token_count=min_token_count)
 corpus
 "Docs:", corpus.n_docs, "Sentences:", corpus.n_sents, "Tokens:", corpus.n_tokens
 
+if st.checkbox("Generate Sentences Similar to Input", value=False):
 
-"## Generate Sentences Similar to Input"
+    "### This works for BANKING ONLY"
 
-from transformers import MarianMTModel, MarianTokenizer
-
-
-def translate(texts, model, tokenizer, language="fr"):
-    """"""
-    # Prepare the text data into appropriate format for the model
-    template = lambda text: f"{text}" if language == "en" else f">>{language}<< {text}"
-    src_texts = [template(text) for text in texts]
-    # Tokenize the texts
-    encoded = tokenizer.prepare_seq2seq_batch(src_texts)
-
-    # Generate translation using model
-    translated = model.generate(**encoded)
-
-    # Convert the generated tokens indices back into text
-    translated_texts = tokenizer.batch_decode(translated, skip_special_tokens=True)
-
-    return translated_texts
-
-
-@st.cache
-def download_model_tokenizer_files(romance_lang: str = "ROMANCE"):
-    ROMANCE = romance_lang
-
-    target_model_name = f"Helsinki-NLP/opus-mt-en-{ROMANCE}"
-    target_tokenizer = MarianTokenizer.from_pretrained(target_model_name)
-    target_model = MarianMTModel.from_pretrained(target_model_name)
-
-    en_model_name = f"Helsinki-NLP/opus-mt-{ROMANCE}-en"
-    en_tokenizer = MarianTokenizer.from_pretrained(en_model_name)
-    en_model = MarianMTModel.from_pretrained(en_model_name)
-    return en_model, en_tokenizer, target_model, target_tokenizer
-
-
-def back_translate(texts, source_lang="en", target_lang="fr"):
-    """
-    Paraphrasing via Back Translation
-    """
-    (
-        en_model,
-        en_tokenizer,
-        target_model,
-        target_tokenizer,
-    ) = download_model_tokenizer_files(romance_lang=target_lang)
-
-    # Translate from source to target language
-    fr_texts = translate(texts, target_model, target_tokenizer, language=target_lang)
-
-    # Translate from target language back to source language
-    back_translated_texts = translate(
-        fr_texts, en_model, en_tokenizer, language=source_lang
+    input_sentence = st.text_input(
+        "Enter sentence which you want to augment?",
+        value="When is my credit card bill due?",
+    ).split("||")
+    min_freq_count = st.slider(
+        "How many tries do you want to make?",
+        value=1,
+        min_value=1,
+        max_value=5,
     )
 
-    return back_translated_texts
+    intent = st.text_input("Enter a 2 word intent please", value="Due Date")
+    append_phrase = f"Sentence: {input_sentence}\nIntent: {intent}\n Paraphrase:"
 
-
-from random import choice
-from typing import List
-
-download_model_tokenizer_files("ROMANCE")
-download_model_tokenizer_files("zh")
-download_model_tokenizer_files("hi")
-
-
-@st.cache
-def augment(en_texts: List[str]):
-    random_romance_lang = choice(["fr", "es", "la", "it", "pt", "ro"])
-    random_asian_lang = choice(["zh", "hi"])
-    return back_translate(
-        back_translate(en_texts, source_lang="en", target_lang="zh"),
-        source_lang="en",
-        target_lang="es",
+    prompt = (
+        """
+    Sentence :  Hello, I want to know about my card status so can you please tell me?
+    Intent : Card Status
+    Paraphrase : Hello, Can you tell me about the card status? It would be really nice if I can get this information
+    Sentence :  Hello, I wanted to know my payment due
+    Intent : Payment Amount Due
+    Paraphrase : I want information about the payment amount due, who do I contact about this?
+    Sentence :  HELLO, I want to register for a security PIN because I want to use it for online transactions.
+    Intent : e-PIN Registration
+    Paraphrase : I want to use e-pin for online transactions so I would like to know about how to register for security pin
+    Sentence :  I want to know the status of my covered card/debit card because i am going to travel.
+    Intent : Card Status
+    Paraphrase : I am going to travel. Can you tell me about eh covered card status
+    Sentence :  I would like to donate to Zakat because I want to be good.
+    Intent : Donation
+    Paraphrase : I want to donate money out of my goodness
+    Sentence :  I want to know what is my covered card outstanding
+    Intent : Payment Amount Due
+    Paraphrase : What is the outstanding balance for the covered card? I would like to know that but I am unable to find these details anywhere?
+    Sentence :  Hello, I want to know what was the last debit transaction on my Debit card because I want to know if somebody is using it.
+    Intent : Debit Transaction
+    Paraphrase : Hello, what was the last debit transaction on my card because I suspect someone else is using it.
+    Sentence :  HELLO, I FORGOT MY E-PIN SO CAN YOU RESET IT FOR ME PLEASE?
+    Intent : e-PIN Reset
+    Paraphrase : I want to reset my e-pin because I forgot.
+    Sentence :  Send me a covered card statement because I want to check my account.
+    Intent : Covered Card e-statement
+    Sentence:
+    """
+        + append_phrase
     )
 
+    keys_path = Path("key.json")
+    try:
+        assert keys_path.exists()
+        backup_api_key = json.loads(keys_path.open("r").read())["api_key"]
+    except:
+        input_api_key = st.text_input("Enter your GPT3 key")
 
-input_sentences = st.text_input(
-    "Enter as many sentences as you want, separated by ||"
-).split("||")
-min_freq_count = st.slider(
-    "How many tries do you want to make?",
-    value=1,
-    min_value=1,
-    max_value=5,
-)
+    input_api_key = st.text_input("Enter your GPT3 key", backup_api_key)
+    engine_id = st.selectbox(
+        "Engine Id", options=["davinci", "davinci-beta", "curie", "curie-beta"]
+    )
+    import openai
 
-while min_freq_count > 0:
-    st.markdown(back_translate(input_sentences))
-    min_freq_count -= 1
+    openai.api_key = input_api_key
+
+    def calling_our_simulation_overlords(prompt: str, min_freq_count: int):
+        response = openai.Completion.create(
+            engine="davinci-beta",
+            prompt=prompt,
+            max_tokens=50,
+            temperature=0.9,
+            frequency_penalty=0.8,
+            n=min_freq_count,
+            stop="Sentence",
+        )
+        return response
+
+    response = calling_our_simulation_overlords(
+        prompt=prompt, min_freq_count=min_freq_count
+    )
+
+    generated_sentences = [
+        choice["text"].strip() for choice in response.to_dict()["choices"]
+    ]
+    # generated_sentences = [back_translate(s) for s in generated_sentences]
+
+    "### Output Sentence"
+    for idx, sentence in enumerate(list(set(generated_sentences))):
+        st.markdown(f"{idx+1}) {sentence}")
+        st.markdown("\n")
 
 if st.checkbox("Explore Word Frequencies"):
     st.markdown("## Word Frequencies Exploration")
@@ -266,17 +268,3 @@ if st.checkbox("Words in Sentences Explorer"):
             sent_count -= 1
         if sent_count == 0:
             break
-
-# option = st.sidebar.selectbox("Which sample do you like best?", df["QueryText"])
-
-# "You selected:", option
-
-# Add a placeholder
-# latest_iteration = st.empty()
-# bar = st.progress(0)
-
-# for i in range(100):
-#     # Update the progress bar with each iteration.
-#     latest_iteration.text(f"Iteration {i+1}")
-#     bar.progress(i + 1)
-#     # time.sleep(0.1)
