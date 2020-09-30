@@ -265,7 +265,6 @@ if st.checkbox("Generate Sentences Similar to Input", value=False):
     generated_sentences = [
         choice["text"].strip() for choice in response.to_dict()["choices"]
     ]
-    # generated_sentences = [back_translate(s) for s in generated_sentences]
 
     "### Output Sentence"
     for idx, sentence in enumerate(list(set(generated_sentences))):
