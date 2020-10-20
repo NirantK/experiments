@@ -17,47 +17,10 @@ st.title("Alfaaz: Text Exploration Tools")
 st.image(
     image="https://verloop.io/wp-content/uploads/2020/08/cropped-VP.io-Website-Grey@2x.png"
 )
-st.markdown("Demo Client: **Abhibus**")
-preview_count = 5
-min_freq_count = 1
 
-api_url = st.text_input(
-    "Please share your Sheet *API* link here",
-    value="https://api.steinhq.com/v1/storages/5f619d225d3cdc44fcd7d4b1",
-)
-sheet = st.text_input("Please input your sheet name here:", value="Queries150")
-col_name = st.text_input(
-    "What is the name of the column which has user queries?", value="QueryText"
-)
-data_url = f"{api_url}/{sheet}"
-
-
-@st.cache
-def read_data_to_df(url: str):
-    df = pd.read_json(url)
-    return df
-
-
-df = read_data_to_df(data_url)
-
-st.markdown("## Text Preview")
-
-st.markdown(f"Here are {preview_count} random samples from the input")
-preview_df = df.sample(preview_count, random_state=37)
-preview_df
-
-"### Preparing for Analysis"
-st.write(
-    "Use a larger number for quick analysis in the beginning and reduce when you are going for depth"
-)
-min_token_count = st.number_input(
-    "Analyze sentences which have atleast how many tokens?",
-    value=2,
-    min_value=2,
-    max_value=10,
-)
-
-
+preview_count = 9
+warning_count = 10000
+# TODO: Figure out hash function which can be used with corpus objects
 def make_corpus(
     df: pd.DataFrame, col_name: str, min_token_count: int
 ) -> textacy.Corpus:
@@ -69,32 +32,172 @@ def make_corpus(
     return corpus
 
 
-corpus = make_corpus(df, col_name="QueryText", min_token_count=min_token_count)
-corpus
-"Docs:", corpus.n_docs, "Sentences:", corpus.n_sents, "Tokens:", corpus.n_tokens
+# @st.cache
+# def read_data_to_df(url: str):
+#     df = pd.read_json(url)
+#     return df
 
-if st.checkbox("Explore Word Frequencies"):
-    st.markdown("## Word Frequencies Exploration")
-    min_freq_count = st.slider(
-        "What is the minimum frequency of words you want to see?",
-        value=3,
-        min_value=2,
-        max_value=10,
+# if st.checkbox("Load Abhibus Demo"):
+#     st.markdown("Demo Client: **Abhibus**")
+#     api_url = st.text_input(
+#         "Please share your Sheet *API* link here",
+#         value="https://api.steinhq.com/v1/storages/5f619d225d3cdc44fcd7d4b1",
+#     )
+#     sheet = st.text_input("Please input your sheet name here:", value="Queries150")
+#     col_name = st.text_input(
+#         "What is the name of the column which has user queries?", value="QueryText"
+#     )
+#     data_url = f"{api_url}/{sheet}"
+#     df = read_data_to_df(data_url)
+
+import io
+
+st.set_option("deprecation.showfileUploaderEncoding", False)
+
+uploaded_file = st.sidebar.file_uploader(
+    "Upload a Tab Separated File", type=["tsv"], accept_multiple_files=False
+)
+st.sidebar.markdown(
+    "If you see an error, please upload a Tab Separated Value (tsv) file."
+)
+with st.sidebar.beta_expander("See Explanation on TSV files"):
+    st.markdown(
+        "TSV files are basically same as csv files, but use a tab character to separate columns."
     )
-    freq_dict: Dict = corpus.word_counts(as_strings=True)
+    st.markdown(
+        "Since lot of our input might have ',' in text, it's useful to use a different character for separating columns."
+    )
+    st.image(
+        "https://i.ibb.co/KFzdyTv/Screen-Shot-2020-10-20-at-11-42-48-AM.png",
+        caption="Download as TSV is the last option in Google Sheets",
+    )
+
+
+@st.cache
+def file_io(uploaded_file):
+    df = pd.read_csv(uploaded_file, sep="\t")
+    return df
+
+
+if uploaded_file is not None:
+    st.markdown("## Data Preview")
+    df = file_io(uploaded_file)
+    st.markdown(
+        f"Here are {preview_count} random samples from the input of {len(df)} rows"
+    )
+    preview_df = df.sample(preview_count, random_state=37)
+    st.write(preview_df)
+
+    st.markdown("### Preparing for Analysis")
+    col_name = st.radio("Select Text Column", options=df.columns)
+
+    with st.beta_expander("Change Minimum Sentence Length"):
+        st.info(
+            "Use a large number for quick analysis in the beginning (>5) and reduce when you are going for depth"
+        )
+        min_token_count = st.number_input(
+            "Analyze sentences which have atleast how many tokens?",
+            value=4,
+            min_value=2,
+            max_value=10,
+        )
+    print("Making Corpus Now!")
+    corpus = make_corpus(df, col_name=col_name, min_token_count=min_token_count)
+    st.write(
+        "Records for Analysis:",
+        corpus.n_docs,
+        "Total Sentences:",
+        corpus.n_sents,
+        "Total Tokens:",
+        corpus.n_tokens,
+    )
+
+mode = st.sidebar.radio(
+    "Analytics Mode:",
+    options=[
+        "Word Frequencies",
+        "Topics",
+        "Similar Sentences",
+        "Sentence Explorer",
+        "Generate Sentences",
+    ],
+)
+
+if mode == "Word Frequencies" and uploaded_file is not None:
+    st.markdown("## Word Frequencies Exploration")
+
+    if st.sidebar.checkbox("Ignore Case (Recommended)", value=True):
+        freq_dict: Dict = corpus.word_counts(
+            as_strings=True, normalize="lower", filter_nums=True, filter_punct=True
+        )
+    else:
+        freq_dict: Dict = corpus.word_counts(
+            as_strings=True, filter_nums=True, filter_punct=True
+        )
 
     freq_dict = {
         k: v
         for k, v in sorted(freq_dict.items(), key=lambda item: item[1], reverse=True)
-        if v >= min_freq_count
+        if v >= 2
     }
 
-    freq_df = pd.DataFrame(freq_dict, index=["Frequency"]).transpose()
-    st.write(freq_df)
-    st.bar_chart(data=freq_df)
+    index_key = "Frequency"
+    freq_df = pd.DataFrame(freq_dict, index=[index_key]).transpose()
 
-if st.checkbox("Explore Word Sets"):
-    st.markdown("## Word Set Exploration")
+    min_freq_count = st.sidebar.slider(
+        "What is the minimum frequency of words you want to see?",
+        value=int(freq_df[index_key].quantile(0.81)),
+        min_value=2,
+        max_value=int(freq_df[index_key].quantile(0.999)),
+    )
+    freq_df = freq_df[freq_df[index_key] > min_freq_count]
+    left, right = st.beta_columns([2, 1])
+    left.bar_chart(freq_df)
+    word_display_count = min(20, len(freq_df))
+    right.markdown(f"Top {word_display_count} words by frequency")
+    right.table(freq_df[:word_display_count])
+
+    with st.beta_expander("Filter By Category Values"):
+        col_list = list(df.columns)
+        col_list.remove(col_name)
+        filter_col_name = st.selectbox(
+            "Select Column which you want to filter by", options=col_list
+        )
+        if filter_col_name is not None:
+            filter_val = st.selectbox(
+                "Select Values to Filter by", options=df[filter_col_name].unique()
+            )
+            filter_df = pd.DataFrame(df[df[filter_col_name] == filter_val][col_name])
+            filter_corpus = make_corpus(
+                filter_df, col_name=col_name, min_token_count=min_token_count
+            )
+            st.info(
+                f"You are exploring {filter_corpus.n_docs} text queries. \n This is a subset of total -- where {filter_col_name} value is: {filter_val}"
+            )
+            # st.dataframe(filter_df.sample(preview_count, random_state=37))
+
+            filter_freq_dict: Dict = filter_corpus.word_counts(
+                as_strings=True, normalize="lower", filter_nums=True, filter_punct=True
+            )
+            filter_freq_dict = {
+                k: v
+                for k, v in sorted(
+                    filter_freq_dict.items(), key=lambda item: item[1], reverse=True
+                )
+                if v >= 2
+            }
+            filter_freq_df = pd.DataFrame(
+                filter_freq_dict, index=[index_key]
+            ).transpose()
+            left_filter, right_filter = st.beta_columns([2, 1])
+            left_filter.bar_chart(filter_freq_df)
+            word_display_count = min(10, len(filter_freq_df))
+            right_filter.markdown(f"Top {word_display_count} words by frequency")
+            right_filter.table(filter_freq_df[:word_display_count])
+
+
+if mode == "Topics" and uploaded_file is not None:
+    st.markdown("## Topics Exploration")
 
     def make_doc_term_matrix(
         corpus: textacy.Corpus,
@@ -118,24 +221,34 @@ if st.checkbox("Explore Word Sets"):
         )
         return vectorizer, doc_term_matrix
 
-    ngrams = st.number_input("ngrams:", value=2, min_value=1, max_value=3)
-    vectorizer, doc_term_matrix = make_doc_term_matrix(
-        corpus, min_freq_count=min_freq_count, ngrams=ngrams
+    ngrams = st.sidebar.number_input("ngrams:", value=2, min_value=1, max_value=3)
+    n_topics = st.sidebar.number_input(
+        "How many topics do you want to explore?", value=5, min_value=2, max_value=10
     )
-    repr(doc_term_matrix)
 
-    n_topics = st.number_input(
-        "How many topics do you want to explore?", value=3, min_value=2, max_value=10
-    )
-    model = textacy.tm.TopicModel("nmf", n_topics=n_topics)
-    model.fit(doc_term_matrix)
-    doc_topic_matrix = model.transform(doc_term_matrix)
+    if corpus.n_docs > warning_count:
+        st.warning(
+            f"Your corpus has more than {warning_count} records. This can be painfully slow. Consider increasing the Minimum Sentence Length"
+        )
+
+    with st.spinner(text="Building a Topic Model"):
+        vectorizer, doc_term_matrix = make_doc_term_matrix(
+            corpus, min_freq_count=min_token_count, ngrams=ngrams
+        )
+        model = textacy.tm.TopicModel("nmf", n_topics=n_topics)
+        model.fit(doc_term_matrix)
+        doc_topic_matrix = model.transform(doc_term_matrix)
+
     doc_topic_matrix.shape
     for topic_idx, top_terms in model.top_topic_terms(vectorizer.id_to_term, top_n=5):
-        st.markdown(f"Word Set {topic_idx+1} : {'; '.join(top_terms)}")
+        st.markdown(f"Topics {topic_idx+1} : {'; '.join(top_terms)}")
 
-if st.checkbox("Find Similar Sentences"):
+if mode == "Similar Sentences" and uploaded_file is not None:
     "## Similar Sentences"
+    if corpus.n_docs > 1000:
+        st.warning(
+            f"Your search has more than {warning_count} records. This can be slow"
+        )
 
     input_sentence = st.text_input(
         "Enter your sentence to which you want to find similar examples",
@@ -162,7 +275,7 @@ if st.checkbox("Find Similar Sentences"):
             st.write("---*Finished*---")
             break
 
-if st.checkbox("Words in Sentences Explorer"):
+if mode == "Sentence Explorer" and uploaded_file is not None:
     "## Find Sentences with Specific Words"
     input_sentence = st.text_input(
         "Enter the words (separated by space)", value="ticket", max_chars=300
@@ -172,6 +285,7 @@ if st.checkbox("Words in Sentences Explorer"):
     sent_count = st.slider(
         "Maximum number of sentences that you want", min_value=1, max_value=10, value=3
     )
+
     for i, doc in enumerate(corpus):
         doc_tokens = set([str(x) for x in get_tokens(doc)])
         if len(input_tokens.intersection(doc_tokens)) >= len(input_tokens):
@@ -180,19 +294,16 @@ if st.checkbox("Words in Sentences Explorer"):
         if sent_count == 0:
             break
 
-if st.checkbox("Generate Sentences Similar to Input", value=False):
+if mode == "Generate Sentences":
 
     "### This works for BANKING ONLY"
 
     input_sentence = st.text_input(
         "Enter sentence which you want to augment?",
         value="When is my credit card bill due?",
-    ).split("||")
+    )
     min_freq_count = st.slider(
-        "How many tries do you want to make?",
-        value=1,
-        min_value=1,
-        max_value=5,
+        "How many tries do you want to make?", value=1, min_value=1, max_value=5
     )
 
     intent = st.text_input("Enter a 2 word intent please", value="Due Date")
@@ -231,17 +342,11 @@ if st.checkbox("Generate Sentences Similar to Input", value=False):
         + append_phrase
     )
 
-    keys_path = Path("key.json")
-    try:
-        assert keys_path.exists()
-        backup_api_key = json.loads(keys_path.open("r").read())["api_key"]
-    except:
-        input_api_key = st.text_input("Enter your GPT3 key")
-
-    input_api_key = st.text_input("Enter your GPT3 key", backup_api_key)
+    input_api_key = st.text_input("Enter your GPT3 key")
     engine_id = st.selectbox(
         "Engine Id", options=["davinci", "davinci-beta", "curie", "curie-beta"]
     )
+
     import openai
 
     openai.api_key = input_api_key
@@ -258,10 +363,14 @@ if st.checkbox("Generate Sentences Similar to Input", value=False):
         )
         return response
 
-    response = calling_our_simulation_overlords(
-        prompt=prompt, min_freq_count=min_freq_count
-    )
-
+    try:
+        response = calling_our_simulation_overlords(
+            prompt=prompt, min_freq_count=min_freq_count
+        )
+    except Exception as e:
+        raise (
+            f"You will need a GPT3 key. Please contact Deepak Singh for the same. Do NOT share the key with your teammates. This key might be reset every 5-7 days.\nDeveloper Info: {e}"
+        )
     generated_sentences = [
         choice["text"].strip() for choice in response.to_dict()["choices"]
     ]
