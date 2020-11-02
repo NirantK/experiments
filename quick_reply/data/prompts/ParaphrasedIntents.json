@@ -1,0 +1,65 @@
+[
+    {
+      "Sentence":" Hello, I want to know about my card status so can you please tell me?",
+      "Intent":"Card Status",
+      "Context" :"Bank",
+      "Paraphrase" : "Hello, Can you tell me about the card status? It would be really nice if I can get this information"
+      
+    },
+    {
+      "Sentence":" Hello, I wanted to know my payment due",
+      "Intent":"Payment Amount Due",
+      "Context" :"Bank",
+      "Paraphrase" : "I want information about payment amount due, who do I contact about this?"
+      
+    },
+    {
+      "Sentence":" HELLO, I want to register to security PIN because I want to use it for online transactions.",
+      "Intent":"e-PIN Registration",
+      "Context" :"Bank",
+      "Paraphrase" : "I want to use e-pin for online transactions so I would like to know about how to register for security pin"
+      
+    },
+    {
+      "Sentence":" I want to know the status of my covered card\/debit card because i am going to travel.",
+      "Intent":"Card Status",
+      "Context" :"Bank",
+      "Paraphrase" : "I am going to travel. Can you tell me about eh covered card status"
+      
+    },
+    {
+      "Sentence":" I would like to donate to Zakat because I want to be good.",
+      "Intent":"Donation",
+      "Context" :"Bank",
+      "Paraphrase" : "I want to donate money out of my goodness"
+      
+    },
+    {
+      "Sentence":" I want to know what is my covered card outstanding",
+      "Intent":"Payment Amount Due",
+      "Context" :"Bank",
+      "Paraphrase" : "What is the outstanding balance for covered card? I would like to know that but I am unable to find these details anywhere?"
+      
+    },
+    {
+      "Sentence":" Hello, I want to know what was the last debit transaction on my Debit card because I want to know if somebody is using it.",
+      "Intent":"Debit Transaction",
+      "Context" :"Bank",
+      "Paraphrase" : "Hello, what was the last debit transaction on my card because I suspect someone else is using it."
+      
+    },
+    {
+      "Sentence":" HELLO, I FORGOT MY E-PIN SO CAN YOU RESET IT FOR ME PLEASE?",
+      "Intent":"e-PIN Reset",
+      "Context" :"Bank",
+      "Paraphrase" : "I want to reset my e-pin because I forgot."
+      
+    },
+    {
+      "Sentence":" Send me covered card statement because I want to check my account.",
+      "Intent":"Covered Card e-statement",
+      "Context" :"Bank",
+      "Paraphrase" : "I need statement about covered card"
+      
+    }
+  ]

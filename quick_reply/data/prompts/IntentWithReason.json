@@ -1,0 +1,82 @@
+[
+    {
+      "Input Sentence":"When is my credit card\/covered card payment due",
+      "Context" : "Bank",
+      "Intent":"Payment due Date",
+      "Reason":"I want to check my payment status",
+      "Structure" : "InformalWithoutGreetings, IntentFirst, WithReason",
+      "Sentence" : "I want to know payment due date because I want to check my payment status"
+    },
+    {
+      "Input Sentence":"Pay my <<vendor>> bill",
+      "Context" : "Bank",
+      "Intent":"Bill Payment",
+      "Reason":"I want to pay",
+      "Structure" : "FormalWithGreetings, ReasonFirst",
+      "Sentence" : "Hello, I want to pay so I want to know more about bill payment, Thank you."
+    },
+    {
+      "Input Sentence":"You have any covered card\/credit card promotions?",
+      "Context" : "Bank",
+      "Intent":"Promotion",
+      "Reason":"I want to compare",
+      "Structure" : "FormalWithGreetings, WithoutReason",
+      "Sentence" : "Hello, I want to know more about promotions, Thanks a lot."
+    },
+    {
+      "Input Sentence":"I would like to donate to Zakat",
+      "Context" : "Bank",
+      "Intent":"Donation",
+      "Reason":"I have surplus money",
+      "Structure" : "FormalWithGreetings, WithReason, IntentFirst",
+      "Sentence" : "Hi, I would like to donate to Zakat because I have surplus money, Regards"
+    },
+    {
+      "Input Sentence":"Check my instalment",
+      "Context" : "Bank",
+      "Intent":"Balance",
+      "Reason":"I want to check the balance",
+      "Structure" : "InformalWithoutGreetings, WithoutReason, IntentFirst",
+      "Sentence" : "I want 2 check balance"
+    },
+    {
+      "Input Sentence":"Check my Finance Murabaha Outstanding Balance",
+      "Context" : "Bank",
+      "Intent":"Balance",
+      "Reason":"I want to know how much is my outstanding balance",
+      "Structure" : "FormalWithGreetings, ReasonFirst",
+      "Sentence" : "HELLO, I want to know how much is my outstanding balance so can you plz help with infromation about balance, THANK YOU"
+    },
+    {
+      "Input Sentence":"Send me covered card statement",
+      "Context" : "Bank",
+      "Intent":"Covered Card e-statement",
+      "Reason":"I forgot to print it",
+      "Structure" : "InformalWithoutGreetings, IntentFirst, WithReason",
+      "Sentence" : "Send me covered card e-statement because I forgot to print it."
+    },
+    {
+      "Input Sentence":"When was my last instalment paid",
+      "Context" : "Bank",
+      "Intent":"Instalment Payment",
+      "Reason":"I want to check the payment",
+      "Structure" : "InformalWithoutGreetings, WithoutReason, WithTypos",
+      "Sentence" : "Wen was my last instalment paid"
+    },
+    {
+      "Input Sentence":"Available limit",
+      "Context" : "Bank",
+      "Intent":"Available Limit",
+      "Reason":"I want to know how much money I have",
+      "Structure" : "WithReason, ReasonFirst, WithTypos",
+      "Sentence" : "I want to know how much money I hav tell me about avialiable limit"
+    },
+    {
+      "Input Sentence":"What was the last Credit transaction on my covered card",
+      "Context" : "Bank",
+      "Intent":"Covered Card Transaction",
+      "Reason":"To see if it's working",
+      "Structure" : "WithReason, FormalWithGreetings",
+      "Sentence" : "Hello, Good Morning, I wanted to know what was the last Credit transaction on my covered card because I want to see if it's working"
+    }
+]

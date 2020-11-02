@@ -1,0 +1,32 @@
+[
+    {
+      "Input Sentence":"I would like to Activate my card",
+      "Context" : "Bank",
+      "Intent":"Activation",
+      "Reason" : "Because I want to do online transactions"
+    },
+    {
+      "Input Sentence":"I would like to Activate my renewal card I just received",
+      "Context" : "Bank",
+      "Intent":"Activation",
+      "Reason" : " Because it's still not working"
+    },
+    {
+      "Input Sentence":"Block all my card",
+      "Context" : "Bank",
+      "Intent":"Block",
+      "Reason" : "Because I am changing the bank"
+    },
+    {
+      "Input Sentence":"Block my debit card",
+      "Context" : "Bank",
+      "Intent":"Block",
+      "Reason" : "Because it's lost"
+    },
+    {
+      "Input Sentence":"Block my covered card",
+      "Context" : "Bank",
+      "Intent":"Block",
+      "Reason" : "Because it's not working"
+    }
+  ]

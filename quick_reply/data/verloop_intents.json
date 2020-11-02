@@ -1,0 +1,215 @@
+{
+        "Returns" : [
+        "Unable to see a return option in my order.",
+        "I want return my order because item is not working",
+        "i need to return sapphire almond nuts regular choco",
+        "can i placed fresh order for the returned items"
+        ],
+        "Refunds" : [
+        "my return was picked up but i haven't received my refund yet",
+        "i don t want refund send the item itself",
+        "my return was picked up but i haven't received my refund yet",
+        "please immediately refund the cancellation fee rupees manually"
+        ],
+        "OrderDelivery" : [
+        "my order delivery is delayed'",
+        "i have been charged rs delivery even though in the original order delivery was free'",
+        "still today order delivery pending'",
+        "request for no order delivery as i will be not   available today any time later am'"
+        ],
+        "Cancellations" : [
+        "order cancel",
+        "why you have not cancelled this order yet",
+        "please i don’t want to cancel my order",
+        "no don t cancel the membership do review about the coupon code i ve used for the membership payment"
+        ],
+        "OrderReceiving" : [
+        "i got the order but don t receive beetroot",
+        "and one item that is cauliflower i ordered but i ve received only one",
+        "i had an order for delivery but haven t received it yet",
+        "my order is delivered but i did not receive one product payment is done"
+        ],
+        "OrderPlacement" : [
+        "some error happening during order placement",
+        "i cannot proceed with my order placement",
+        "when i order placement that time i saw ur free item is not in stock",
+        "i am not getting order placement alerts on my phone and mail pls check"
+        ],
+        "CashOnDelivery" : [
+        "my order shows as cash on delivery but payment amount got debited",
+        "i want to make online payment for my cash on delivery cod order",
+        "i did payment amount had already deducted from my account bt still it shows cash on delivery",
+        "i want to make online payment for my cash on delivery cod order"
+        ],
+        "WhereIsMyOrder" : [
+        " i wana know where is my order",
+        "where the hell is my order",
+        "hi can you check with the delivery executive where the order is",
+        "Where’s my order charcoal toothpaste"
+        ],
+        "DamagedProduct" : [
+        "cubes are open seal and damaged",
+        "good night refills got damage in conditions",
+        "i had ordered a hair serum but it was damaged and the refund is not complete yet",
+        "The apples that I have received are of completely rotten quality"
+        ],
+        "OrderStatus" : [
+        "I want to know the status of my order",
+        "What’s the status of my order?",
+        "It's been so long and no update on the order status!",
+        "The expected delivery date for the order was 29-12-2018. I have still not received the order. Only one item from the order was delivered on ti"
+        ],
+        "Courier" : [
+        "would it be send by courier or who will deliver can you change the status to not delivered",
+        "actually i want to courier a fruit basket from our big basket to thane can we do so from your end",
+        "your courier is done the pickup",
+        "Courier facility did not reach to my address and not even contact me and updated that I m not available or I refused delivery"
+        ],
+        "DeliveryFailure" : [
+        "can u confirm me the reason for frequent delivery failure",
+        "i want reason for delivery failure",
+        "what about delivery failure charges",
+        "displying faild delivery on my order"
+        ],
+        "DeliveryPerson" : [
+        "please arrange my call with your delivery boy",
+        "can i get delivery person number",
+        "at what time did this delivery person come to my doorstep",
+        "i wanted to know about timing of delivery man who wl come to my residence"
+        ],
+        "CreditCard" : [
+        "please cancel all my orders and refund to my amount back to my credit card",
+        "so i want refund in my credit card not as wallet",
+        "i am using icici credit card and my amount in",
+        "please guide me on how can i pay if i want to use my credit card"
+        ],
+        "DebitCard" : [
+        "i paid through hdfc debit card",
+        "i paid via debit card",
+        "Hi! I want to enquire on payment. I’m from Malaysia but I’d like to gift a friend something from Nykaa so it it possible to pay with a Malaysian debit card? :)",
+        "My total amount  540 but 400 i need to pay debit card"
+        ],
+        "Cashback" : [
+        "i have not received cashback for delay in delivery",
+        "my cashback isn t credited till now",
+        "there was a condition that cashback will be credited within days",
+        "i want to know the cashback process"
+        ],
+        "Wallet" : [
+        "wallet option is not shown",
+        "why my wallet balance rs",
+        "i not see my yet in my wallet",
+        "no it is a return request right and the refund should be credited in my wallet"
+        ],
+        "Rewards" : [
+        "i referred one of my friend and he made first purchase last week but i didn't get any rewards",
+        "i got some rewards as free milk",
+        "I referred Nykaa app to my friend she got 200 rps coupon so want to know where is my reward I recommend her n she shopped but where is my points??",
+        "Rewards are still not added"
+        ],
+        "LoyaltyPoints" : [
+        "i have not received the loyalty points for late delivery",
+        "Mere loyalty points ab tk ni aaye retutn",
+        "I cancelled my order now how to redeem my loyalty points",
+        "What if I used discount vouchers or loyalty points during time of payment and I have to cancel my order?"
+        ],
+        "OffersVouchers&Discounts" : [
+        "i forgot to apply voucher",
+        "can i avail corporate discount",
+        "i got these products with discount",
+        "i want to know the current offers"
+        ],
+        
+        "Exchange" : [
+        "hi i have requested for exchange of an item but no one has picked it up",
+        "when can i expect the replacement",
+        "i want better replacement for this now",
+        "now what the solution as i don t have the option for exchange or return now"
+        ],
+        
+        "MissingItem" : [
+        "the product was missing",
+        "in my delivery list aime items are missing",
+        "so how can i place order for that missing product",
+        "how much time will it take to deliver the missing item"
+        ],
+        
+        "OrderNotShipped" : [
+        "my order is not shipped",
+        "hi my order is still not shipped i wanted the groceries before could please hurry up with this order",
+        "hi i see that the order has been packed but not shipped yet",
+        "still the order is not shipped why"
+        ],
+        
+        "OrderNotConfirmed" : [
+        "the order was not confirmed",
+        "one of the order still not confirmed",
+        "when the order was in the basket why was it not confirmed",
+        "my order is placed the amount rs debited my account but its not confirmed on bb yet"
+        ],
+        
+        "Reschedule" : [
+        " reschedule this order in evening",
+        " please reschedule the slot",
+        " hi my order has been rescheduled",
+        " if it's your problem then i have to reschedule it"
+        ],
+        
+        
+        "AddItem" : [
+        "i want to add items to my last order",
+        "i just placed and order and want to add item",
+        "i want to add items in this order",
+        "i want to add items in my existing order"
+        ],
+        "LoginSignup":[
+        "I am unable to login/signup",
+        "I am unable to login",
+        "I am unable to sign up"
+        ],
+        "ChangeEmail":[
+        "I want to update my email id",
+        "I want to change my email id"
+        ],
+        "ChangeAddress":[
+        "I want to change to address",
+        "I need to change my delivery address n mention house no",
+        "Need to change my shipping address for this order",
+        "he address at which I have asked to deliver the order. I want to change the address"
+        ],
+        "SlotChange":[
+        "I want to change the delivery slot",
+        "I want to change the slot",
+        "Change the delivery slot for my order",
+        "Where did i get the informatiin of changed delivery slot"
+        ],
+        "ChangeContact" : 
+        ["I want to update my phone number",
+        "I want to change to my contact number",
+        "I want to change to my contact",
+        "I want to change to my cnct number"],
+        "Gifts":
+        ["But now i’m not able to put gift card no in my order",
+        "How i put gift card no during place an order",
+        "I want to ask nyka prieve members birthday gifts",
+        "This is ridiculous.. Nykaa. Said they will give free gift with this product.. I want to cancel this order.. Pathetic experience.. Ordering with nykaa since long but never had such experience.",
+        "It was supposed to be new year gift"],
+        "TalkToSupport" : [
+        "and also your customer care no is not reachable",
+        "bigbasket customer care no",
+        "pls check it and revert me ur customer care no not working",
+        "have been trying to connect with your customer care number",
+        "I need complain number",
+        "So please give me a complain number",
+        "5724124268 Big Basket Complaint Number",
+        "This is the fifith time I am complaining",
+        "i want to complain regarding my milk subscription",
+        "I can not keep on complaining this on daily basis"],
+        "OutOfStock" : [
+        "that's ok man but the item is out of stock the same shall not be billed",
+        "but later it got rescheduled with few items out of stock",
+        "why fruits and vegetables showing as out of stock",
+        "but then if it's out of stock then why it's being shown to me while choosing items"
+        ]
+
+}
