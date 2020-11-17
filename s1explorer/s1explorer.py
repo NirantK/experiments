@@ -5,6 +5,7 @@ from typing import Dict, List, Tuple
 
 import streamlit as st
 import textacy
+import pandas as pd
 from fastcore.utils import Path
 from textacy.spacier.doc_extensions import get_preview, get_tokens
 from collections import Counter
@@ -15,11 +16,9 @@ st.subheader("Exploring S1 documents with NLP tools")
 import io
 st.set_option("deprecation.showfileUploaderEncoding", False)
 
-with st.sidebar.beta_expander("Credits"):
+with st.sidebar:
     st.markdown("Created by [Nirant](https://nirantk.com) | Twitter: [@NirantK](https://twitter.com/NirantK).\n Contact for Enterprise and Custom Versions of this for your documents"
     )
-
-with st.sidebar.beta_expander("Coming up Next"):
     st.markdown("Tweet to [NirantK](https://twitter.com/NirantK) for which S1 you want to see here next")
 
 ## Frequency Calculation
@@ -30,10 +29,23 @@ def get_text(filepath:str):
         plaintext = f.read()
     return plaintext
 
+def get_nlp_object():
+    nlp = spacy.load("en_core_web_sm")
+    custom_stop_words = ["$", "\n", "common"]
+    # custom_stop_words += ["Class", "2020", "2019", "million", "shares", "Company", "business"]
+    for word in custom_stop_words:
+        nlp.Defaults.stop_words.add(word)
+  
+    nlp.max_length = 1.1*1341865 # allow greater memory consumption
+    return nlp
+
+def my_hash_func(spacy_obj: spacy.tokens.doc.Doc):
+    return str(spacy_obj)
+
+@st.cache(hash_funcs={spacy.tokens.doc.Doc: my_hash_func})
 def get_spacy_doc(filepath: str):
     plaintext = get_text(filepath)    
-    nlp = spacy.load("en_core_web_sm")    
-    nlp.max_length = 1.1*1341865 # allow greater memory consumption
+    nlp = get_nlp_object()
     print("Loaded NLP object")
     doc = nlp(plaintext)
     return doc
@@ -49,7 +61,8 @@ nouns = [
     for token in doc
     if not token.is_stop and not token.is_punct and not token.is_digit and token.pos_ == "NOUN"
 ]
-k = st.number_input("Number of Common Words, Phrases, Nouns you want to see. Smaller is faster.", min_value=2, step=1, value=6)
+
+k = st.number_input("Number of Common Words, Phrases, Nouns you want to see. Smaller is faster.", min_value=2, step=1, value=5)
 # five most common tokens
 word_freq = Counter(words)
 common_words = word_freq.most_common(k)
@@ -58,15 +71,14 @@ common_words = word_freq.most_common(k)
 noun_freq = Counter(nouns)
 common_nouns = noun_freq.most_common(k)
 
-noun_counter = [{"word": k, "count": v} for (k, v) in common_nouns]
-word_counter = [{"word": k, "count": v} for (k, v) in common_words]
-st.bar_chart(noun_counter)
-st.bar_chart(word_counter)
+# noun_counter = [{"x": k, "y": v} for (k, v) in common_nouns]
+# st.bar_chart(noun_counter)
+
+# word_counter = [{"word": k, "count": v} for (k, v) in common_words]
+# st.bar_chart(pd.DataFrame(noun_counter))
+# st.bar_chart(pd.DataFrame(word_counter))
 # ngrams = list(textacy.extract.ngrams(doc, 2, min_freq=2))
 
-# custom_stop_words = ["$", "\n", "common", "Class", "2020", "2019", "million", "shares", "Company", "business"]
-# for word in custom_stop_words:
-#     nlp.Defaults.stop_words.add(word)
 
 
 # if st.sidebar.checkbox("Ignore Case (Recommended)", value=True):
