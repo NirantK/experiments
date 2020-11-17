@@ -7,18 +7,64 @@ import streamlit as st
 import textacy
 from fastcore.utils import Path
 from textacy.spacier.doc_extensions import get_preview, get_tokens
-
+from collections import Counter
+import spacy
 st.title("s1explorer.com")
 st.subheader("Exploring S1 documents with NLP tools")
 
 import io
 st.set_option("deprecation.showfileUploaderEncoding", False)
 
-with st.beta_expander("Credits"):
-    st.markdown("Created by [Nirant](https://nirantk.com) || Twitter: [@NirantK](https://twitter.com/NirantK)"
+with st.sidebar.beta_expander("Credits"):
+    st.markdown("Created by [Nirant](https://nirantk.com) | Twitter: [@NirantK](https://twitter.com/NirantK)"
     )
 
+
 ## Frequency Calculation
+
+@st.cache
+def get_text(filepath:str):
+    with Path(filepath).open("r") as f:
+        plaintext = f.read()
+    return plaintext
+
+def get_spacy_doc(filepath: str):
+    plaintext = get_text(filepath)    
+    nlp = spacy.load("en_core_web_sm")    
+    nlp.max_length = 1.1*1341865 # allow greater memory consumption
+    doc = nlp(plaintext)
+    return doc
+
+doc = get_spacy_doc("airbnb.txt")
+
+# all tokens that arent stop words or punctuations
+words = [token.text for token in doc if not token.is_stop and not token.is_punct and not token.is_digit]
+
+# noun tokens that arent stop words or punctuations
+nouns = [
+    token.text
+    for token in doc
+    if not token.is_stop and not token.is_punct and not token.is_digit and token.pos_ == "NOUN"
+]
+
+
+# five most common tokens
+word_freq = Counter(words)
+common_words = word_freq.most_common(5)
+
+# five most common noun tokens
+noun_freq = Counter(nouns)
+common_nouns = noun_freq.most_common(5)
+
+st.bar_chart(common_words)
+common_nouns
+
+ngrams = list(textacy.extract.ngrams(doc, 2, min_freq=2))
+
+# custom_stop_words = ["$", "\n", "common", "Class", "2020", "2019", "million", "shares", "Company", "business"]
+# for word in custom_stop_words:
+#     nlp.Defaults.stop_words.add(word)
+
 
 if st.sidebar.checkbox("Ignore Case (Recommended)", value=True):
     freq_dict: Dict = corpus.word_counts(
