@@ -1,26 +1,23 @@
 import collections
 import json
 import time
+from collections import Counter
 from typing import Dict, List, Tuple
 
+import fasttext
+import pandas as pd
+import spacy
 import streamlit as st
 import textacy
-import pandas as pd
 from fastcore.utils import Path
 from textacy.spacier.doc_extensions import get_preview, get_tokens
-from collections import Counter
-import spacy
 
 st.set_page_config(
-    page_title="S1 Explorer",
-    page_icon="📄",
-    layout="wide",
-    initial_sidebar_state="collapsed",
+    page_title="S1 Explorer", page_icon="📄", layout="wide", initial_sidebar_state="collapsed",
 )
 st.title("s1explorer.com")
 st.subheader("Exploring S1 documents with NLP tools")
 
-import io
 
 st.set_option("deprecation.showfileUploaderEncoding", False)
 
@@ -30,8 +27,9 @@ with st.sidebar:
     )
     st.markdown("Tweet to [NirantK](https://twitter.com/NirantK) for which S1 you want to see here next")
 
+
 @st.cache
-def get_text(filepath: str):
+def get_text(filepath: str)->str:
     with Path(filepath).open("r") as f:
         plaintext = f.read()
     return plaintext
@@ -56,11 +54,20 @@ def get_nlp_object():
     return nlp
 
 
-def my_hash_func(spacy_obj: spacy.tokens.doc.Doc):
+def hash_spacy(spacy_obj: spacy.tokens.doc.Doc):
+    """
+    Hash function for spacy doc objections
+
+    Args:
+        spacy_obj (spacy.tokens.doc.Doc): [description]
+
+    Returns:
+        string representation of the object
+    """
     return str(spacy_obj)
 
 
-@st.cache(hash_funcs={spacy.tokens.doc.Doc: my_hash_func})
+@st.cache(hash_funcs={spacy.tokens.doc.Doc: hash_spacy})
 def get_spacy_doc(filepath: str):
     plaintext = get_text(filepath)
     nlp = get_nlp_object()
@@ -82,10 +89,7 @@ nouns = [
 ]
 
 most_common_count = st.number_input(
-    "Number of Common Words, Phrases, Nouns you want to see. Smaller is faster.",
-    min_value=2,
-    step=1,
-    value=5,
+    "Number of Common Words, Phrases, Nouns you want to see. Smaller is faster.", min_value=2, step=1, value=5,
 )
 word_freq = Counter(words)
 common_words = word_freq.most_common(most_common_count)
@@ -110,3 +114,8 @@ ngrams_list = list(textacy.extract.ngrams(doc, 3, min_freq=2))
 ngrams_list = [t.text for t in ngrams_list]
 ngrams = Counter(ngrams_list).most_common(most_common_count)
 right_center.dataframe([{"phrase": k, "count": v} for (k, v) in ngrams])
+
+with st.beta_expander("Vector Playground"):
+    model = fasttext.load_model("lemma_stripped_airbnb.bin")
+    word = st.text_input("Enter word to find similar words", value="COVID-19")
+    st.write(model.get_nearest_neighbors(word))
