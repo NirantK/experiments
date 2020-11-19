@@ -1,7 +1,23 @@
 # experiments
 Repository for Throwaway Code
 
-Results for **ShiftedReLU**, with Batchnorm removed experiments:
+Snippet to find lexically unique statements in a list of statements
+```python
+from fuzzywuzzy import fuzz
+
+uniques = [""]
+for i in intent_text:
+    scores = []
+    for j in uniques:
+        scores.append(fuzz.ratio(i, j))
+    if max(scores) < 51:
+        print(f"Found {len(uniques)} uniques so far")
+        uniques.append(i)
+```
+
+Behaviour Note: Every statement that this finds is unique, but this does NOT find ALL unique statements. 
+
+## Results for ShiftedReLU with Batchnorm removed experiments:
 
 |Model| BN | Activation | Accuracy|
 | --- | --- | -- | --| 
