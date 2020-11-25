@@ -4,15 +4,17 @@ Repository for Throwaway Code
 Snippet to find lexically unique statements in a list of statements
 ```python
 from fuzzywuzzy import fuzz
+from typing import List
 
-uniques = [""]
-for i in intent_text:
-    scores = []
-    for j in uniques:
-        scores.append(fuzz.ratio(i, j))
-    if max(scores) < 51:
-        print(f"Found {len(uniques)} uniques so far")
-        uniques.append(i)
+def get_uniques(sentence_list:List[str], threshold:int=51):
+    uniques = [""]
+    for sentence in sentence_list:
+        scores = []
+        for j in uniques:
+            scores.append(fuzz.ratio(sentence, j))
+        if max(scores) < threshold:
+#             print(f"Found {len(uniques)} uniques so far")
+            uniques.append(i)
 ```
 
 Behaviour Note: Every statement that this finds is unique, but this does NOT find ALL unique statements. 
